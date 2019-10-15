@@ -1,6 +1,8 @@
 # MVA Topological Data Analysis
 
-## Installation instructions (Anaconda & Ubuntu)
+## Installation instructions (conda & Ubuntu)
+
+My machine is an up-to-date Ubuntu 19.04 (disco) with multiple Python environments managed by conda.
 
 ### Dependencies
 
@@ -11,18 +13,21 @@ The golden rule in that case is to never ever install Python dependencies throug
 If a system-wide (not necessarily Python) dependency is installed through conda then installing it through `apt` will have no effect: if you have `graphviz` packages installed through conda do not reinstall it through `apt`.
 
 Install VTK in my base conda environment:
-```
+```bash
 conda install -c conda-forge vtk
 ```
 This makes it available system-wide.
 The VTK configuration requires `libxt` to be installed. It's related to Xorg display server (standard issue on Ubuntu systems) can be installed system-wide using `apt` with no side effects (though you can also manage it using conda):
-```
+```bash
 sudo apt install libxt-dev
 ```
 
 Other dependencies that have no side effects can be installed through `apt`:
-```
+```bash
 sudo apt install libeigen3-dev
 sudo apt install qt5-default qttools5-dev
 ```
 
+The tutorial says to update the Cmake flags `CMAKE_C_FLAGS=-luuid` and `CMAKE_CXX_FLAGS=-luuid` on Linux Mint (>19). That is also the case on Ubuntu 19+.
+
+You also have to tweak where CMake finds the libraries to prevent conflicts and enable Scikit-Learn support (**note** Numpy's includes are found in `anaconda/lib/python3.x/site-packages/numpy/core/include`). Set CMake to force use the VTK bundled with Paraview.
