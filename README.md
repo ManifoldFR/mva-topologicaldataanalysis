@@ -2,7 +2,7 @@
 
 ## Installation instructions (conda & Ubuntu)
 
-My machine is an up-to-date Ubuntu 19.04 (disco) with multiple Python environments managed by conda.
+My machine is an up-to-date Ubuntu 19.10 (eoan) with multiple Python environments managed by conda.
 
 ### Dependencies
 
