@@ -1,2 +1,4 @@
 bettiData/
 .ipynb_checkpoints/
+*.mat
+*.dat

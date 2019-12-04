@@ -1,6 +1,12 @@
 # MVA Topological Data Analysis
 
-## Installation instructions (conda & Ubuntu)
+Topological data analysis (TDA) is the use of topology to analyze (potentially high-dimensional) datasets in a way that exploits topological features and invariants.
+
+
+![](images/distmat_pers_alpha_dim1.png)
+
+
+## TTK installation instructions (conda & Ubuntu)
 
 My machine is an up-to-date Ubuntu 19.10 (eoan) with multiple Python environments managed by conda.
 
