@@ -4,7 +4,8 @@ Topological data analysis (TDA) is the use of topology to analyze (potentially h
 
 
 ![](images/distmat_pers_alpha_dim1.png)
-
+![](images/persistence_MDS_embedding.png)
+![](images/persistence_landscape_MC.png)
 
 ## TTK installation instructions (conda & Ubuntu)
 

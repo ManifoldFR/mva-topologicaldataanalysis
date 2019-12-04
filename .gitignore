@@ -2,3 +2,5 @@ bettiData/
 .ipynb_checkpoints/
 *.mat
 *.dat
+
+**/__pycache__
