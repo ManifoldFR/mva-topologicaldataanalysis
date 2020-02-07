@@ -4,37 +4,53 @@ Topological data analysis (TDA) is the use of topology to analyze (potentially h
 
 
 ![](images/distmat_pers_alpha_dim1.png)
-![](images/persistence_MDS_embedding.png)
+
 ![](images/persistence_landscape_MC.png)
 
-## TTK installation instructions (conda & Ubuntu)
+## Gudhi install
 
-My machine is an up-to-date Ubuntu 19.10 (eoan) with multiple Python environments managed by conda.
-
-### Dependencies
-
-The instructions on the course website have a few commands that will have the user install dependencies through `apt` that include or themselves have dependencies on Python apt packages (for instance VTK or Scikit-Learn). **That is not desirable if the user manages a complex system where Anaconda Python environments have priority over the system `apt` Python**.
-
-The golden rule in that case is to never ever install Python dependencies through `apt` because your default interpreter is in a conda environment where `apt` packages won't be picked up/won't work.
-
-If a system-wide (not necessarily Python) dependency is installed through conda then installing it through `apt` will have no effect: if you have `graphviz` packages installed through conda do not reinstall it through `apt`.
-
-Install VTK in my base conda environment:
+It can be easily installed when using Anaconda by
 ```bash
-conda install -c conda-forge vtk
+conda install -c conda-forge gudhi
 ```
-This makes it available system-wide.
-The VTK configuration requires `libxt` to be installed. It's related to Xorg display server (standard issue on Ubuntu systems) can be installed system-wide using `apt` with no side effects (though you can also manage it using conda):
+This will also make the Gudhi headers and libraries available on your system at `$CONDA_PREFIX/{include,lib}` for writing custom C++ modules.
+
+
+## TTK/Paraview installation on a system with Anaconda
+
+At time of writing my machine runs the latest Ubuntu 19.10 (eoan) with several Python environments managed by conda and the base conda environment active at all times.
+
+### Conda-managed dependencies
+
+The installation instructions on the TTK website have the user install dependencies through `apt`, including Python packages and or other packages that depend on Python.
+If you manage Python and other dependencies through Anaconda that might not be desirable. For example, on my system, conda manages:
+* Python
+* Eigen
+* Boost
+* QT5
+* Graphviz
+
+which I do *not* want to reinstall through `apt` because that would also reinstall a ton of deps I already have under Anaconda. It also creates confusion for the C/C++ linker (for instance link against something in `/usr/lib` while runtime looks at `/path/to/conda/lib`).
+
+TTK and Paraview use CMake to look for the dependencies on your system and generate a build. By default it will look at system paths first, so you need to set it to look through your Anaconda paths first. The easiest way to do that is to set the CMAKE_PREFIX_PATH environment variable before invoking CMake:
 ```bash
-sudo apt install libxt-dev
+export CMAKE_PREFIX_PATH=$CONDA_PREFIX
+cmake-gui ../ # or cmake ../
 ```
 
-Other dependencies that have no side effects can be installed through `apt`:
+Then you can check where CMake finds the headers and libraries to see if everything is consistent.
+
+
+The tutorial says to update the CMake flags `CMAKE_C_FLAGS=-luuid` and `CMAKE_CXX_FLAGS=-luuid` on Linux Mint (>19). That is also the case on Ubuntu 19+.
+
+**Remark** Some libraries such as `zfp` can be installed through conda:
 ```bash
-sudo apt install libeigen3-dev
-sudo apt install qt5-default qttools5-dev
+conda install -c conda-forge zfpy
 ```
+so you don't need to compile it yourself.
 
-The tutorial says to update the Cmake flags `CMAKE_C_FLAGS=-luuid` and `CMAKE_CXX_FLAGS=-luuid` on Linux Mint (>19). That is also the case on Ubuntu 19+.
+The Paraview install still needs to be patched with TTK though so  installing it through conda won't suffice!
 
-You also have to tweak where CMake finds the libraries to prevent conflicts and enable Scikit-Learn support (**note** Numpy's includes are found in `anaconda/lib/python3.x/site-packages/numpy/core/include`). Set CMake to force use the VTK bundled with Paraview.
+
+For the TTK installation, the NumPy headers might be found at `/usr/include`, which is a mistake due to how CMake's `find_path` function works, so be sure to change them to the headers in your conda env!
+
